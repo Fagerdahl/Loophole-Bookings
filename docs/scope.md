@@ -1,4 +1,4 @@
-# SCOPE Definition 
+# SCOPE Definition
 
 ## Purpose
 
@@ -6,23 +6,26 @@ Here I clarify the scope of the thesis implementation to ensure that the work re
 
 ## OOAD Context
 
-### Related Requirements: 
+### Related Requirements:
 
-### Functional: 
-* FR1 - (UC1)
-* FR2 - (UC1)
-* FR3 - (UC1)
-* FR4 - (UC1)
-* FR5 - (UC2)
-* FR6 - (UC2)
+### Functional:
+
+- FR1 - (UC1)
+- FR2 - (UC1)
+- FR3 - (UC1)
+- FR4 - (UC1)
+- FR5 - (UC2)
+- FR6 - (UC2)
 
 ### Non-Functional:
-* NFR1 (Isolation) 
-* NFR4 (Maintainability)
 
-### Related Use Cases: 
-* UC1 – Create Booking
-* UC2 – Cancel Booking
+- NFR1 (Isolation)
+- NFR4 (Maintainability)
+
+### Related Use Cases:
+
+- UC1 – Create Booking
+- UC2 – Cancel Booking
 
 Related Epic: EPIC A – Project Setup & Scope
 
@@ -37,31 +40,31 @@ The purpose of this scope definition is to limit the technical complexity and al
 
 _The following functionality is included in the thesis implementation:_
 
-* Availability rules based on date intervals
+- Availability rules based on date intervals
 
-* Creation of bookings
+- Creation of bookings
 
-* Cancellation of bookings (admin-only)
+- Cancellation of bookings (admin-only)
 
-* Booking status handling and state transitions
+- Booking status handling and state transitions
 
-* Unit tests verifying domain rules
+- Unit tests verifying domain rules
 
 ## Out of Scope
 
 _The following parts are explicitly excluded from the thesis implementation:_
 
-* WordPress integration
+- WordPress integration
 
-* Database persistence
+- Database persistence
 
-* Pricing rules and seasonal logic
+- Pricing rules and seasonal logic
 
-* Admin user interface
+- Admin user interface
 
-* Email notifications
+- Email notifications
 
-* Authentication, authorization and HTTPS configuration
+- Authentication, authorization and HTTPS configuration
 
 !These aspects are considered surrounding infrastructure and are therefore outside the scope of thesis implementation!
 
@@ -69,8 +72,8 @@ _The following parts are explicitly excluded from the thesis implementation:_
 
 The scope is verified by reviewing that:
 
-* UML diagrams only model in-scope functionality
+- UML diagrams only model in-scope functionality
 
-* Implemented modules correspond to the defined scope
+- Implemented modules correspond to the defined scope
 
-* Project board epics and issues do not include excluded functionality
+- Project board epics and issues do not include excluded functionality
