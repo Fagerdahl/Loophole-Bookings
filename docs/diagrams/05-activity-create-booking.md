@@ -18,3 +18,4 @@ flowchart TD
   H --> I[Return confirmation + bookingId]
   I --> Z([End])
 
+```

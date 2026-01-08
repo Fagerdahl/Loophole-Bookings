@@ -15,3 +15,4 @@ flowchart LR
     AdminUI["Admin panel"]
   end
 
+```

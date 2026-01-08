@@ -1,11 +1,12 @@
 Best Practices - Loophole Bookings
 
 ## Purpose
+
 Keep the booking domain clean, testable and independent from infrastructure (UI/API/DB)
 
 ## Non-negotiables (Project Rules)
 
-Domain code must NOT import anything from Express, UI, DB or Node-only APIs. 
+Domain code must NOT import anything from Express, UI, DB or Node-only APIs.
 
 All business rules live in the domain/application layer - never in routes/controllers.
 
@@ -24,10 +25,10 @@ Adapters: API / UI / persistence (thin, no business logic)
 ## Folder structure
 
 src/
-  domain/
-  application/
-  adapters/
-  tests/
+domain/
+application/
+adapters/
+tests/
 
 ## Coding Conventions
 
@@ -43,15 +44,15 @@ Keep functions pure where possible.
 
 ## Domain Modeling Rules
 
-Use Value Objects for: 
+Use Value Objects for:
 DateRange, BookingStatus
 
-Use Entities for: Booking, Room 
-_Entities have an identity and a lifecycle. Booking = status changes over time. 
-Room = has identity and capacity._ 
+Use Entities for: Booking, Room
+_Entities have an identity and a lifecycle. Booking = status changes over time.
+Room = has identity and capacity._
 
 Validate at boundaries:
-Value objects validate their own invariants (e.g., DateRange must be valid. 'From' must be before 'To') 
+Value objects validate their own invariants (e.g., DateRange must be valid. 'From' must be before 'To')
 
 _Value object = Invalid states are prevented in the creation of an object- which simplifies the domain logic. The object protects itself_
 
@@ -138,4 +139,3 @@ _Out of scope:_
 - Tests
 
 - Then build Room and Booking
-

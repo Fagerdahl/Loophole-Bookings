@@ -12,3 +12,4 @@ flowchart LR
 
   Guest --> UC1
   Admin --> UC2
+```

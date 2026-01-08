@@ -23,3 +23,4 @@ sequenceDiagram
 
   Core-->>API: bookingCancelled (status=CANCELLED)
   API-->>UI: cancellation confirmation
+```

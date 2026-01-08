@@ -25,3 +25,4 @@ sequenceDiagram
 
   Core-->>API: bookingCreated (status=CREATED)
   API-->>UI: confirmation + bookingId
+```

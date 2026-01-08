@@ -9,7 +9,9 @@
   },
   "scripts": {
     "test": "vitest",
-    "test:watch": "vitest --watch"
+    "test:watch": "vitest --watch",
+    "format": "prettier --check .",
+    "format:write": "prettier --write ."
   },
   "repository": {
     "type": "git",
@@ -23,6 +25,7 @@
   },
   "homepage": "https://github.com/Fagerdahl/Loophole-Bookings#readme",
   "devDependencies": {
+    "prettier": "^3.7.4",
     "vitest": "^4.0.16"
   }
 }
