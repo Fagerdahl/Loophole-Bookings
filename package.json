@@ -1,0 +1,28 @@
+{
+  "name": "loophole-bookings",
+  "version": "1.0.0",
+  "description": "This repository contains my thesis project, “Loophole” which focuses on isolating, implementing and testing the core domain logic for a booking system.",
+  "type": "module",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "vitest",
+    "test:watch": "vitest --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fagerdahl/Loophole-Bookings.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Fagerdahl/Loophole-Bookings/issues"
+  },
+  "homepage": "https://github.com/Fagerdahl/Loophole-Bookings#readme",
+  "devDependencies": {
+    "vitest": "^4.0.16"
+  }
+}

@@ -1,0 +1,1 @@
+Automatiserade tester körs via GitHub Actions på en standardiserad Linux-miljö för att säkerställa reproducerbara testresultat oberoende av lokal utvecklingsmiljö. Därav Ubuntu Latest i workflows. I nästa issue- fixa CI. 
