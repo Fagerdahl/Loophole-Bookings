@@ -1,4 +1,5 @@
 # Definition of Done (DoD)
+
 _is used in this project to ensure that all implemented functionality is verified, tested and documented before being considered complete and merged to main branch. This supports traceability between requirements, UML models, implementation and tests - and aligns the development process with OOAD methodology_
 
 <strong>Purpose</strong>

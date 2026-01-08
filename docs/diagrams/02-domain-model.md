@@ -1,4 +1,4 @@
-## Domain Model 
+## Domain Model
 
 ```mermaid
 classDiagram
@@ -29,3 +29,4 @@ classDiagram
   Booking --> Room : reserves
   Booking --> DateRange : has
   Booking --> BookingStatus : state
+```
