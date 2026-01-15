@@ -6,6 +6,7 @@ import { DateRange } from '../src/domain/value-objects/DateRange.js';
 import { DomainError } from '../src/domain/errors/DomainError.js';
 import crypto from 'node:crypto';
 
+// Testcase 1: Booking contains a valid DateRange and a number of guests
 describe('Booking', () => {
   it('contains a DateRange and number of guests', () => {
     const dateRange = new DateRange({ from: '2026-01-01', to: '2026-01-05' });
@@ -20,6 +21,7 @@ describe('Booking', () => {
     expect(booking.guests).toBe(2);
   });
 
+  // Testcase 2: Booking has initial status 'CREATED' and should not be reachable from the outside
   it('has initial status CREATED', () => {
     const dateRange = new DateRange({ from: '2026-01-01', to: '2026-01-05' });
 
@@ -32,6 +34,7 @@ describe('Booking', () => {
     expect(booking.status).toBe('CREATED');
   });
 
+  // Testcase 3: Booking creation fails with invalid DateRange
   it('throws DomainError when dateRange is missing or invalid', () => {
     expect(() =>
       Booking.create({ id: crypto.randomUUID(), guests: 2 })
@@ -43,6 +46,7 @@ describe('Booking', () => {
     ).toThrow(DomainError);
   });
 
+  // Testcase 4: Booking creation fails with invalid number of guests, must be + integer
   it('throws DomainError when guests is invalid', () => {
     const dateRange = new DateRange({ from: '2026-01-01', to: '2026-01-05' });
 
@@ -60,6 +64,7 @@ describe('Booking', () => {
     ).toThrow(DomainError);
   });
 
+  // Testcase 5: Booking status cannot be set from the outside
   it('does not allow status to be set from the outside', () => {
     const dateRange = new DateRange({ from: '2026-01-01', to: '2026-01-05' });
     const booking = Booking.create({
@@ -72,7 +77,7 @@ describe('Booking', () => {
       booking.status = 'CANCELLED';
     }).toThrow(TypeError);
 
-    // Prove that it remains CREATED
+    // Prove that it remains CREATED, status is unchanged and read-only
     expect(booking.status).toBe('CREATED');
   });
 });

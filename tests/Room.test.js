@@ -8,6 +8,7 @@ import { Booking } from '../src/domain/entities/Booking.js';
 import { DateRange } from '../src/domain/value-objects/DateRange.js';
 import { DomainError } from '../src/domain/errors/DomainError.js';
 
+// Testcase 1: Basic properties and creation with valid data
 describe('Room', () => {
   it('has a unique id and a capacity property', () => {
     const room = Room.create({
@@ -19,6 +20,7 @@ describe('Room', () => {
     expect(room.capacity).toBe(4);
   });
 
+  // Testcase 2: Room can contain several bookings entities, also verifying immutability since addBooking returns a new Room instance
   it('can contain several bookings', () => {
     const room = Room.create({
       id: crypto.randomUUID(),
@@ -44,26 +46,32 @@ describe('Room', () => {
     expect(updatedRoom.bookings[1]).toBeInstanceOf(Booking);
   });
 
+  // Testcase 3: Invalid or missing id or capacity should throw DomainError
   it('throws DomainError when id is missing/invalid', () => {
     expect(() => Room.create({ capacity: 2 })).toThrow(DomainError);
     expect(() => Room.create({ id: 123, capacity: 2 })).toThrow(DomainError);
   });
 
+  // Testcase 4: Invalid capacity values should throw DomainError
   it('throws DomainError when capacity is invalid', () => {
     expect(() => Room.create({ id: crypto.randomUUID(), capacity: 0 })).toThrow(
       DomainError
     );
+
     expect(() =>
       Room.create({ id: crypto.randomUUID(), capacity: -1 })
     ).toThrow(DomainError);
+
     expect(() =>
       Room.create({ id: crypto.randomUUID(), capacity: 1.5 })
     ).toThrow(DomainError);
+
     expect(() =>
       Room.create({ id: crypto.randomUUID(), capacity: '4' })
     ).toThrow(DomainError);
   });
 
+  // Testcase 5: Test that only Booking instances can be added to the Room, protection against corruption
   it('throws DomainError when adding a non-Booking', () => {
     const room = Room.create({
       id: crypto.randomUUID(),
@@ -73,14 +81,16 @@ describe('Room', () => {
     expect(() => room.addBooking({})).toThrow(DomainError);
   });
 
+  // Testcase 6: Ensure immutability of bookings array
   it('is immutable (does not expose internal bookings array for mutation)', () => {
     const room = Room.create({
       id: crypto.randomUUID(),
       capacity: 4,
     });
 
-    // Test to guarantee immutability of bookings array
+    // Testcase 7: This test is to guarantee immutability of bookings array, the original Room state must remain unchanged
     const bookings = room.bookings;
+
     expect(() => bookings.push('hack')).toThrow(); // push should fail because bookings is frozen
     expect(room.bookings).toHaveLength(0);
   });
