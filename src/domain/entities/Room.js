@@ -2,6 +2,7 @@
 
 import { DomainError } from '../errors/DomainError.js';
 import { Booking } from './Booking.js';
+import { DateRange } from '../value-objects/DateRange.js';
 
 export class Room {
   #id;
@@ -49,11 +50,23 @@ export class Room {
       throw new DomainError('Room can only contain Booking instances.');
     }
 
-    // immutability: create new Room with new booking list
     return Room.create({
       id: this.#id,
       capacity: this.#capacity,
       bookings: [...this.#bookings, booking],
+    });
+  }
+
+  isAvailable(requestedDateRange) {
+    if (!(requestedDateRange instanceof DateRange)) {
+      throw new DomainError('isAvailable requires a DateRange instance.');
+    }
+
+    return this.#bookings.every((booking) => {
+      if (booking.status === 'CANCELLED') {
+        return true;
+      }
+      return !booking.dateRange.overlapsWith(requestedDateRange);
     });
   }
 
