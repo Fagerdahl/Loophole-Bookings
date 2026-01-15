@@ -1,4 +1,4 @@
-/* tests for Booking entity */
+/* Test for Booking entity */
 
 import { describe, it, expect } from 'vitest';
 import { Booking } from '../src/domain/entities/Booking.js';

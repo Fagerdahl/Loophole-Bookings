@@ -1,3 +1,5 @@
+/* Booking entity */
+
 import { DomainError } from '../errors/DomainError.js';
 import { DateRange } from '../value-objects/DateRange.js';
 
