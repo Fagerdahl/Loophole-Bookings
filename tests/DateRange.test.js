@@ -1,4 +1,4 @@
-/* tests for DateRange entity */
+/* Test for DateRange entity */
 
 import { describe, it, expect } from 'vitest';
 import { DateRange } from '../src/domain/value-objects/DateRange.js';
