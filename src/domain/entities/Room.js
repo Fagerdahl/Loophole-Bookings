@@ -50,6 +50,11 @@ export class Room {
       throw new DomainError('Room can only contain Booking instances.');
     }
 
+    // Room owns the capacity constraint
+    if (booking.guests > this.#capacity) {
+      throw new DomainError('Booking guests exceed room capacity.');
+    }
+
     return Room.create({
       id: this.#id,
       capacity: this.#capacity,

@@ -81,17 +81,50 @@ describe('Room', () => {
     expect(() => room.addBooking({})).toThrow(DomainError);
   });
 
-  // Testcase 6: Ensure immutability of bookings array
+  // Testcase 6: Ensure immutability of bookings array, the original Room state must remain unchanged
   it('is immutable (does not expose internal bookings array for mutation)', () => {
     const room = Room.create({
       id: crypto.randomUUID(),
       capacity: 4,
     });
 
-    // Testcase 7: This test is to guarantee immutability of bookings array, the original Room state must remain unchanged
     const bookings = room.bookings;
 
     expect(() => bookings.push('hack')).toThrow(); // push should fail because bookings is frozen
     expect(room.bookings).toHaveLength(0);
+  });
+
+  // Testcase 7: Allows booking when guests are equal to or less than capacity
+  it('allows booking when guests are equal to or less than capacity', () => {
+    const room = Room.create({
+      id: crypto.randomUUID(),
+      capacity: 2,
+    });
+
+    const booking = Booking.create({
+      id: crypto.randomUUID(),
+      dateRange: new DateRange({ from: '2026-02-01', to: '2026-02-03' }),
+      guests: 2,
+    });
+
+    const updatedRoom = room.addBooking(booking);
+
+    expect(updatedRoom.bookings).toHaveLength(1);
+  });
+
+  // Testcase 8: Reject booking when guests exceed room capacity
+  it('throws DomainError when booking guests exceed room capacity', () => {
+    const room = Room.create({
+      id: crypto.randomUUID(),
+      capacity: 2,
+    });
+
+    const booking = Booking.create({
+      id: crypto.randomUUID(),
+      dateRange: new DateRange({ from: '2026-02-01', to: '2026-02-03' }),
+      guests: 3,
+    });
+
+    expect(() => room.addBooking(booking)).toThrow(DomainError);
   });
 });
