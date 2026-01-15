@@ -38,6 +38,19 @@ export class Booking {
     });
   }
 
+    cancel({ isAdmin }) {
+      if (isAdmin != true) {
+        throw new DomainError('Only administrators can cancel bookings.');
+      }
+
+      return new Booking({
+        id: this.#id,
+        dateRange: this.#dateRange,
+        guests: this.#guests,
+        status: BOOKING_STATUS.CANCELLED,
+      });
+    }
+
   get id() {
     return this.#id;
   }

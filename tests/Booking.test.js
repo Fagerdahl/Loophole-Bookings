@@ -80,4 +80,34 @@ describe('Booking', () => {
     // Prove that it remains CREATED, status is unchanged and read-only
     expect(booking.status).toBe('CREATED');
   });
+
+  // Testcase 6: allows admin to cancel a booking
+  it('allows only admin to cancel a booking', () => {
+    const booking = Booking.create({
+      id: crypto.randomUUID(),
+      guests: 2,
+      dateRange: new DateRange({ from: '2026-01-01', to: '2026-01-03' }),
+    });
+
+    const cancelledBooking = booking.cancel({ isAdmin: true });
+
+    expect(cancelledBooking.status).toBe('CANCELLED');
+    expect(booking.status).toBe('CREATED'); // Original booking remains unchanged
+  });
+
+  // Testcase 7: Cancellation attempted from the outside by non-admin throws DomainError
+  it('throws DomainError when non-admin tries to cancel a booking', () => {
+    const booking = Booking.create({
+      id: crypto.randomUUID(),
+      guests: 2,
+      dateRange: new DateRange({ from: '2026-01-01', to: '2026-01-03' }),
+    });
+
+    expect(() => {
+      booking.cancel({ isAdmin: false });
+    }).toThrow(DomainError);
+    expect(() => {
+      booking.cancel({ isAdmin: undefined });
+    }).toThrow(DomainError);
+  });
 });
