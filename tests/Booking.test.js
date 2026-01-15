@@ -110,4 +110,19 @@ describe('Booking', () => {
       booking.cancel({ isAdmin: undefined });
     }).toThrow(DomainError);
   });
+
+  // Testcase 8: Cancellation of an already cancelled booking throws DomainError
+  it('throws DomainError when trying to double cancel a booking', () => {
+    const booking = Booking.create({
+      id: crypto.randomUUID(),
+      guests: 2,
+      dateRange: new DateRange({ from: '2026-01-01', to: '2026-01-03' }),
+    });
+
+    const cancelledBooking = booking.cancel({ isAdmin: true });
+
+    expect(() => {
+      cancelledBooking.cancel({ isAdmin: true }).toThrow(DomainError);
+    });
+  });
 });
