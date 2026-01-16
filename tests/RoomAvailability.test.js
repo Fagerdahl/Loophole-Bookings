@@ -6,6 +6,7 @@ import crypto from 'node:crypto';
 import { Room } from '../src/domain/entities/Room.js';
 import { Booking } from '../src/domain/entities/Booking.js';
 import { DateRange } from '../src/domain/value-objects/DateRange.js';
+import test from 'node:test';
 
 // Testcase 1: A room should be available when there are no bookings
 describe('Room availability', () => {
@@ -71,4 +72,40 @@ describe('Room availability', () => {
 
     expect(room.isAvailable(requested)).toBe(true);
   });
+
+  // Testcase 5: Room becomes available again when a booking is cancelled
+  const booking = Booking.create({
+    id: crypto.randomUUID(),
+    guests: 2,
+    dateRange: new DateRange({
+      from: '2026-01-05',
+      to: '2026-01-12',
+    }),
+  });
+
+  const roomWithActiveBooking = Room.create({
+    id: crypto.randomUUID(),
+    capacity: 2,
+    bookings: [booking],
+  });
+
+  const requested = new DateRange({
+    from: '2026-01-10',
+    to: '2026-01-15',
+  });
+
+  // Active booking blocks availability
+  expect(roomWithActiveBooking.isAvailable(requested)).toBe(false);
+
+  // Cancel booking
+  const cancelledBooking = booking.cancel({ isAdmin: true });
+
+  const roomWithCancelledBooking = Room.create({
+    id: crypto.randomUUID(),
+    capacity: 2,
+    bookings: [cancelledBooking],
+  });
+
+  // Cancelled booking no longer blocks availability
+  expect(roomWithCancelledBooking.isAvailable(requested)).toBe(true);
 });
