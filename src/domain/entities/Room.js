@@ -62,6 +62,15 @@ export class Room {
     });
   }
 
+  // Usually Room is immutable, but we need a way to update bookings, so this is the new version of the booking list
+  withBookings(bookings) {
+    return Room.create({
+      id: this.#id,
+      capacity: this.#capacity,
+      bookings,
+    });
+  }
+
   isAvailable(requestedDateRange) {
     if (!(requestedDateRange instanceof DateRange)) {
       throw new DomainError('isAvailable requires a DateRange instance.');
