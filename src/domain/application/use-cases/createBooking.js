@@ -52,7 +52,7 @@ export function createBooking(
     guests,
   });
 
-  // Add the booking to the selected room, domain enforces the rules 
+  // Add the booking to the selected room, domain enforces the rules
   const updatedRoom = availableRoom.addBooking(booking);
 
   // Persistanve through the store abstraction
