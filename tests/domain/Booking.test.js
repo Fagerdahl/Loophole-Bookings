@@ -1,9 +1,9 @@
 /* Test for Booking entity */
 
 import { describe, it, expect } from 'vitest';
-import { Booking } from '../src/domain/entities/Booking.js';
-import { DateRange } from '../src/domain/value-objects/DateRange.js';
-import { DomainError } from '../src/domain/errors/DomainError.js';
+import { Booking } from '../../src/domain/entities/Booking.js';
+import { DateRange } from '../../src/domain/value-objects/DateRange.js';
+import { DomainError } from '../../src/domain/errors/DomainError.js';
 import crypto from 'node:crypto';
 
 // Testcase 1: Booking contains a valid DateRange and a number of guests
