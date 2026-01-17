@@ -1,8 +1,8 @@
 /* Test for DateRange entity */
 
 import { describe, it, expect } from 'vitest';
-import { DateRange } from '../src/domain/value-objects/DateRange.js';
-import { DomainError } from '../src/domain/errors/DomainError.js';
+import { DateRange } from '../../src/domain/value-objects/DateRange.js';
+import { DomainError } from '../../src/domain/errors/DomainError.js';
 
 // Testcase 1: Ensure that from and to dates are required, DateRange must always represent a complete interval
 describe('DateRange', () => {

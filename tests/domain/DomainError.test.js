@@ -1,7 +1,7 @@
 /* Vitest is the framwork used for testing */
 
 import { describe, it, expect } from 'vitest';
-import { DomainError } from '../src/domain/errors/DomainError.js';
+import { DomainError } from '../../src/domain/errors/DomainError.js';
 
 // Testcase: Ensure that DomainError works as expected
 describe('DomainError', () => {

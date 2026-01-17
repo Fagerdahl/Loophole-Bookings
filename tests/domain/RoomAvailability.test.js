@@ -3,10 +3,9 @@
 import { describe, it, expect } from 'vitest';
 import crypto from 'node:crypto';
 
-import { Room } from '../src/domain/entities/Room.js';
-import { Booking } from '../src/domain/entities/Booking.js';
-import { DateRange } from '../src/domain/value-objects/DateRange.js';
-import test from 'node:test';
+import { Room } from '../../src/domain/entities/Room.js';
+import { Booking } from '../../src/domain/entities/Booking.js';
+import { DateRange } from '../../src/domain/value-objects/DateRange.js';
 
 // Testcase 1: A room should be available when there are no bookings
 describe('Room availability', () => {

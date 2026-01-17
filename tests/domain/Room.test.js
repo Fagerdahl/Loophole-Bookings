@@ -3,10 +3,10 @@
 import { describe, it, expect } from 'vitest';
 import crypto from 'node:crypto';
 
-import { Room } from '../src/domain/entities/Room.js';
-import { Booking } from '../src/domain/entities/Booking.js';
-import { DateRange } from '../src/domain/value-objects/DateRange.js';
-import { DomainError } from '../src/domain/errors/DomainError.js';
+import { Room } from '../../src/domain/entities/Room.js';
+import { Booking } from '../../src/domain/entities/Booking.js';
+import { DateRange } from '../../src/domain/value-objects/DateRange.js';
+import { DomainError } from '../../src/domain/errors/DomainError.js';
 
 // Testcase 1: Basic properties and creation with valid data
 describe('Room', () => {
