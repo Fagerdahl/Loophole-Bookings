@@ -33,6 +33,8 @@ class InMemoryRoomStore {
   }
 }
 
+/* ----------------TEST----------------- */
+
 // Testcase 1 - CreateBooking when all conditions are met
 describe('CreateBooking Use Case', () => {
   it('creates a booking when a suitable room is available', () => {
