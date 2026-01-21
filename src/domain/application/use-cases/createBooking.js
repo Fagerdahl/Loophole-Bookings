@@ -26,6 +26,13 @@ export function createBooking(
   store,
   { idGenerator = () => crypto.randomUUID() } = {}
 ) {
+  if (
+    !store ||
+    typeof store.listRooms !== 'function' ||
+    typeof store.saveRoom !== 'function'
+  ) {
+    throw new DomainError('Invalid RoomSto');
+  }
   // Create a DateRange value object & its creation will validate the dates
   const dateRange = new DateRange({ from, to });
 
