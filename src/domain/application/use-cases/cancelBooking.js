@@ -7,9 +7,9 @@ import { DomainError } from '../../errors/DomainError.js';
  *
  * Responsibility:
  * - Locate the booking through rooms provided by the store
- * - Delegate authorization + state transition rules to Booking.cancel(...)
+ * - Delegate authorization + state transition rules to Room.cancelBooking(...)
  * - Persist the updated Room through the store
- * - Return the updated booking to the calling layer
+ * - Return the cancelled booking
  */
 
 export function cancelBooking({ bookingId, isAdmin }, store) {
@@ -33,26 +33,10 @@ export function cancelBooking({ bookingId, isAdmin }, store) {
     throw new DomainError('Booking not found.');
   }
 
-  // Extract the booking from the room
-  const booking = roomWithBooking.bookings.find((b) => b.id === bookingId);
-  if (!booking) {
-    throw new DomainError('Booking not found in the specified room.');
-  }
+  const { room: updatedRoom, booking: cancelledBooking } =
+    roomWithBooking.cancelBooking({ bookingId, isAdmin });
 
-  // Domain handles rules: admin-only + prevent double cancellation
-  const cancelledBooking = booking.cancel({ isAdmin });
-
-  // Immutability: replace the booking in the list without mutating original room
-  const updatedBookings = roomWithBooking.bookings.map((b) =>
-    b.id === bookingId ? cancelledBooking : b
-  );
-
-  // Requires Room.withBookings(bookings) to create updated Room instance
-  const updatedRoom = roomWithBooking.withBookings(updatedBookings);
-
-  // Persist the updated room through the store abstraction
   store.saveRoom(updatedRoom);
 
-  // Return the cancelled booking to the caller
   return cancelledBooking;
 }

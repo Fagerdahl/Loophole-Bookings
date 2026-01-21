@@ -1,9 +1,10 @@
-/* Room entity */
+/* Room entity - Aggregate Root */
 
 import { DomainError } from '../errors/DomainError.js';
 import { Booking } from './Booking.js';
 import { DateRange } from '../value-objects/DateRange.js';
 
+import crypto from 'node:crypto';
 export class Room {
   #id;
   #capacity;
@@ -13,6 +14,7 @@ export class Room {
     Room.#assertId(id);
     Room.#assertCapacity(capacity);
     Room.#assertBookings(bookings);
+    Room.#assertNoOverlaps(bookings);
 
     this.#id = id;
     this.#capacity = capacity;
@@ -41,8 +43,73 @@ export class Room {
   }
 
   get bookings() {
-    // Return the frozen bookings array
-    return this.#bookings;
+    // Return a new frozen bookings array- read only
+    return Object.freeze([...this.#bookings]);
+  }
+
+  /** Aggregate root API (UC1 - Create Booking)
+   *
+   * - Creates a booking under Room rules
+   * - Returns both updated room and booking (Immutable friendly)
+   *
+   */
+
+  createBooking(
+    { from, to, guests },
+    { idGenerator = () => crypto.randomUUID() } = {}
+  ) {
+    const dateRange = new DateRange({ from, to });
+
+    if (!Number.isInteger(guests) || guests < 1) {
+      throw new DomainError('Guests must be a positive integer.');
+    }
+
+    if (guests > this.#capacity) {
+      throw new DomainError('Booking guests exceed room capacity.');
+    }
+
+    if (!this.isAvailable(dateRange)) {
+      throw new DomainError(
+        'Room is not available for the requested date range.'
+      );
+    }
+
+    const booking = Booking.create({
+      id: idGenerator(),
+      dateRange,
+      guests,
+    });
+
+    const updatedRoom = this.addBooking(booking);
+    return { room: updatedRoom, booking };
+  }
+
+  /**
+   * Aggregate root API (UC2 - Cancel Booking)
+   * Authorization lives here (not in Booking)
+   */
+  cancelBooking({ bookingId, isAdmin }) {
+    if (!bookingId || typeof bookingId !== 'string') {
+      throw new DomainError('cancelBooking requires a valid bookingId.');
+    }
+
+    if (isAdmin !== true) {
+      throw new DomainError('Only administrators can cancel bookings.');
+    }
+
+    const booking = this.#bookings.find((b) => b.id === bookingId);
+    if (!booking) {
+      throw new DomainError('Booking not found.');
+    }
+
+    const cancelled = booking.cancel();
+
+    const updatedBookings = this.#bookings.map((b) =>
+      b.id === bookingId ? cancelled : b
+    );
+
+    const updatedRoom = this.withBookings(updatedBookings);
+    return { room: updatedRoom, booking: cancelled };
   }
 
   addBooking(booking) {
@@ -55,6 +122,12 @@ export class Room {
       throw new DomainError('Booking guests exceed room capacity.');
     }
 
+    if (!this.isAvailable(booking.dateRange)) {
+      throw new DomainError(
+        'Room is not available for the requested date range.'
+      );
+    }
+
     return Room.create({
       id: this.#id,
       capacity: this.#capacity,
@@ -64,6 +137,14 @@ export class Room {
 
   // Usually Room is immutable, but we need a way to update bookings, so this is the new version of the booking list
   withBookings(bookings) {
+    Room.#assertBookings(bookings);
+    Room.#assertNoOverlaps(bookings);
+
+    for (const b of bookings) {
+      if (b.guests > this.#capacity) {
+        throw new DomainError('Booking guests exceed room capacity.');
+      }
+    }
     return Room.create({
       id: this.#id,
       capacity: this.#capacity,
@@ -106,6 +187,20 @@ export class Room {
         throw new DomainError(
           'Room bookings must contain only Booking instances.'
         );
+      }
+    }
+  }
+
+  static #assertNoOverlaps(bookings) {
+    const active = bookings.filter((b) => b.status !== 'CANCELLED');
+
+    for (let i = 0; i < active.length; i += 1) {
+      for (let j = i + 1; j < active.length; j += 1) {
+        if (active[i].dateRange.overlapsWith(active[j].dateRange)) {
+          throw new DomainError(
+            'Room cannot contain overlapping active bookings.'
+          );
+        }
       }
     }
   }

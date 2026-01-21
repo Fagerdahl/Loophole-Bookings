@@ -13,13 +13,12 @@ import crypto from 'node:crypto';
  * This use case orchestrates the booking creation flow by coordinating
  * domain rules without implementing business logic itself.
  *
- * The domain layer is responsible for validation and rules:
- * - DateRange validates the date interval
- * - Room.isAvailable determines availability
- * - Room.addBooking enforces capacity constraints
- * - Booking.create sets the initial booking state
- *
- * The application layer (this file) only controls the order of operations.
+ * - Validate input through DateRange VO
+ * - Select an available room (application-level selection)
+ * - Delegate booking creation to the Room aggregate root
+ * - Persist updated room through store
+ * - Return created booking
+ * - The application layer (this file) only controls the order of operations.
  */
 
 export function createBooking(
@@ -53,18 +52,12 @@ export function createBooking(
   }
 
   // Create the Booking entity, this guarantees valid DateRange, initial status and valid number of guests
-  const booking = Booking.create({
-    id: idGenerator(),
-    dateRange,
-    guests,
-  });
+  const { room: updatedRoom, booking } = availableRoom.createBooking(
+    { from, to, guests },
+    { idGenerator }
+  );
 
-  // Add the booking to the selected room, domain enforces the rules
-  const updatedRoom = availableRoom.addBooking(booking);
-
-  // Persistanve through the store abstraction
   store.saveRoom(updatedRoom);
 
-  // Return the created booking to the caller
   return booking;
 }

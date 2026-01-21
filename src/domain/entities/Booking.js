@@ -38,11 +38,7 @@ export class Booking {
     });
   }
 
-  cancel({ isAdmin }) {
-    if (isAdmin != true) {
-      throw new DomainError('Only administrators can cancel bookings.');
-    }
-
+  cancel() {
     if (this.#status === BOOKING_STATUS.CANCELLED) {
       throw new DomainError('Booking is already cancelled.');
     }
