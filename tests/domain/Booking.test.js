@@ -112,7 +112,7 @@ describe('Booking', () => {
   });
 
   // Testcase 8: Cancellation of an already cancelled booking throws DomainError
-  it('throws DomainError when trying to double cancel a booking', () => {
+  it('throws DomainError when trying to cancel an already cancelled booking', () => {
     const booking = Booking.create({
       id: crypto.randomUUID(),
       guests: 2,
@@ -121,8 +121,8 @@ describe('Booking', () => {
 
     const cancelledBooking = booking.cancel({ isAdmin: true });
 
-    expect(() => {
-      cancelledBooking.cancel({ isAdmin: true }).toThrow(DomainError);
-    });
+    expect(() => cancelledBooking.cancel({ isAdmin: true })).toThrow(
+      DomainError
+    );
   });
 });

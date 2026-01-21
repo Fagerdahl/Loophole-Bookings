@@ -51,12 +51,13 @@ describe('Room availability', () => {
 
   // Testcase 4: CANCELLED bookings do not block availability
   it('is available when overlapping booking is CANCELLED', () => {
-    const cancelledBooking = new Booking({
+    const booking = Booking.create({
       id: crypto.randomUUID(),
       guests: 2,
       dateRange: new DateRange({ from: '2026-01-05', to: '2026-01-12' }),
-      status: 'CANCELLED',
     });
+
+    const cancelledBooking = booking.cancel({ isAdmin: true });
 
     const room = Room.create({
       id: crypto.randomUUID(),
@@ -73,38 +74,40 @@ describe('Room availability', () => {
   });
 
   // Testcase 5: Room becomes available again when a booking is cancelled
-  const booking = Booking.create({
-    id: crypto.randomUUID(),
-    guests: 2,
-    dateRange: new DateRange({
-      from: '2026-01-05',
-      to: '2026-01-12',
-    }),
+  it('becomes available when an active booking is cancelled', () => {
+    const booking = Booking.create({
+      id: crypto.randomUUID(),
+      guests: 2,
+      dateRange: new DateRange({
+        from: '2026-01-05',
+        to: '2026-01-12',
+      }),
+    });
+
+    const roomWithActiveBooking = Room.create({
+      id: crypto.randomUUID(),
+      capacity: 2,
+      bookings: [booking],
+    });
+
+    const requested = new DateRange({
+      from: '2026-01-10',
+      to: '2026-01-15',
+    });
+
+    // Active booking blocks availability
+    expect(roomWithActiveBooking.isAvailable(requested)).toBe(false);
+
+    // Cancel booking
+    const cancelledBooking = booking.cancel({ isAdmin: true });
+
+    const roomWithCancelledBooking = Room.create({
+      id: crypto.randomUUID(),
+      capacity: 2,
+      bookings: [cancelledBooking],
+    });
+
+    // Cancelled booking no longer blocks availability
+    expect(roomWithCancelledBooking.isAvailable(requested)).toBe(true);
   });
-
-  const roomWithActiveBooking = Room.create({
-    id: crypto.randomUUID(),
-    capacity: 2,
-    bookings: [booking],
-  });
-
-  const requested = new DateRange({
-    from: '2026-01-10',
-    to: '2026-01-15',
-  });
-
-  // Active booking blocks availability
-  expect(roomWithActiveBooking.isAvailable(requested)).toBe(false);
-
-  // Cancel booking
-  const cancelledBooking = booking.cancel({ isAdmin: true });
-
-  const roomWithCancelledBooking = Room.create({
-    id: crypto.randomUUID(),
-    capacity: 2,
-    bookings: [cancelledBooking],
-  });
-
-  // Cancelled booking no longer blocks availability
-  expect(roomWithCancelledBooking.isAvailable(requested)).toBe(true);
 });
