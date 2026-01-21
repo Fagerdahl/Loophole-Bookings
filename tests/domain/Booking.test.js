@@ -4,6 +4,7 @@ import { describe, it, expect } from 'vitest';
 import { Booking } from '../../src/domain/entities/Booking.js';
 import { DateRange } from '../../src/domain/value-objects/DateRange.js';
 import { DomainError } from '../../src/domain/errors/DomainError.js';
+import { Room } from '../../src/domain/entities/Room.js';
 import crypto from 'node:crypto';
 
 // Testcase 1: Booking contains a valid DateRange and a number of guests
@@ -97,32 +98,33 @@ describe('Booking', () => {
 
   // Testcase 7: Cancellation attempted from the outside by non-admin throws DomainError
   it('throws DomainError when non-admin tries to cancel a booking', () => {
-    const booking = Booking.create({
-      id: crypto.randomUUID(),
-      guests: 2,
-      dateRange: new DateRange({ from: '2026-01-01', to: '2026-01-03' }),
+    const dateRange = new DateRange({ from: '2026-02-01', to: '2026-02-03' });
+    const booking = Booking.create({ id: 'b1', dateRange, guests: 1 });
+
+    const room = Room.create({
+      id: 'r1',
+      capacity: 2,
+      bookings: [booking],
     });
 
     expect(() => {
-      booking.cancel({ isAdmin: false });
+      room.cancelBooking({ bookingId: booking.id, isAdmin: false });
     }).toThrow(DomainError);
+
     expect(() => {
-      booking.cancel({ isAdmin: undefined });
+      room.cancelBooking({ bookingId: booking.id, isAdmin: undefined });
     }).toThrow(DomainError);
   });
 
   // Testcase 8: Cancellation of an already cancelled booking throws DomainError
-  it('throws DomainError when trying to double cancel a booking', () => {
-    const booking = Booking.create({
-      id: crypto.randomUUID(),
-      guests: 2,
-      dateRange: new DateRange({ from: '2026-01-01', to: '2026-01-03' }),
-    });
+  it('throws DomainError when cancelling a booking twice', () => {
+    const dateRange = new DateRange({ from: '2026-02-01', to: '2026-02-03' });
+    const booking = Booking.create({ id: 'b1', dateRange, guests: 1 });
 
-    const cancelledBooking = booking.cancel({ isAdmin: true });
+    const cancelled = booking.cancel();
 
     expect(() => {
-      cancelledBooking.cancel({ isAdmin: true }).toThrow(DomainError);
-    });
+      cancelled.cancel();
+    }).toThrow(DomainError);
   });
 });
