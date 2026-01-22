@@ -19,7 +19,7 @@ export class InMemoryRoomStore {
     this.#rooms = rooms;
   }
 
-   /**
+  /**
    * Returns all rooms in the store.
    * Note:
    * - Returns a shallow copy to protect internal state.
@@ -29,7 +29,7 @@ export class InMemoryRoomStore {
     return [...this.#rooms];
   }
 
- /**
+  /**
    * Fetch a single room by id.
    * Used in demos to verify state after a use case has run.
    */
