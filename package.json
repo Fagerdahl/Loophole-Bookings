@@ -16,7 +16,8 @@
     "demo:5.2": "node demo/cancelBooking.js",
     "demo:5.3": "node demo/denyUnauthorizedCancel.js",
     "demo:5.4": "node demo/noAvailableRoom.js",
-    "demo": "npm run demo:5.1 && npm run demo:5.2 && npm run demo:5.3 && npm run demo:5.4"
+    "demo": "npm run demo:5.1 && npm run demo:5.2 && npm run demo:5.3 && npm run demo:5.4",
+    "prepare": "husky"
   },
   "repository": {
     "type": "git",
@@ -30,7 +31,20 @@
   },
   "homepage": "https://github.com/Fagerdahl/Loophole-Bookings#readme",
   "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
     "prettier": "^3.7.4",
     "vitest": "^4.0.16"
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write"
+    ],
+    "*.json": [
+      "prettier --write"
+    ],
+    "*.md": [
+      "prettier --write"
+    ]
   }
 }
