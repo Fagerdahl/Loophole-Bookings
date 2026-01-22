@@ -11,7 +11,12 @@
     "test": "vitest",
     "test:watch": "vitest --watch",
     "format": "prettier --check .",
-    "format:write": "prettier --write ."
+    "format:write": "prettier --write .",
+    "demo:5.1": "node demo/createBooking.js",
+    "demo:5.2": "node demo/cancelBooking.js",
+    "demo:5.3": "node demo/denyUnauthorizedCancel.js",
+    "demo:5.4": "node demo/noAvailableRoom.js",
+    "demo": "npm run demo:5.1 && npm run demo:5.2 && npm run demo:5.3 && npm run demo:5.4"
   },
   "repository": {
     "type": "git",
