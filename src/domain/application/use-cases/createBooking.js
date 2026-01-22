@@ -1,6 +1,5 @@
 /* Create a new booking based on domain rules */
 
-import { Booking } from '../../entities/Booking.js';
 import { DateRange } from '../../value-objects/DateRange.js';
 import { DomainError } from '../../errors/DomainError.js';
 
@@ -31,13 +30,21 @@ export function createBooking(
     typeof store.listRooms !== 'function' ||
     typeof store.saveRoom !== 'function'
   ) {
-    throw new DomainError('Invalid RoomSto');
+    throw new DomainError(
+      'Invalid RoomStore: expected listRooms() and saveRoom().'
+    );
   }
   // Create a DateRange value object & its creation will validate the dates
   const dateRange = new DateRange({ from, to });
-
   // Get all rooms from the store abstraction, use case does not care where data comes from
   const rooms = store.listRooms();
+
+  const nonRoom = rooms.find((r) => r && typeof r.isAvailable !== 'function');
+  if (nonRoom) {
+    throw new DomainError(
+      `Store returned a non-Room instance: ${nonRoom?.constructor?.name ?? typeof nonRoom}`
+    );
+  }
 
   // Find an available room that fits the guest count & capacity
   const availableRoom = rooms.find(
