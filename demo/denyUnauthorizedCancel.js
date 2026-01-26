@@ -2,7 +2,7 @@ import { Room } from '../src/domain/entities/Room.js';
 import { createBooking } from '../src/domain/application/use-cases/createBooking.js';
 import { cancelBooking } from '../src/domain/application/use-cases/cancelBooking.js';
 import { bookingView } from './utils.js';
-import { InMemoryRoomStore } from './store.js';
+import { InMemoryRoomStore } from './inMemoryRoomStore.js';
 
 /**
  * Demo 5.3 UC2 - Cancel Booking (unauthorized)

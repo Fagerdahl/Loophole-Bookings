@@ -1,6 +1,6 @@
 import { Room } from '../src/domain/entities/Room.js';
 import { createBooking } from '../src/domain/application/use-cases/createBooking.js';
-import { InMemoryRoomStore } from './store.js';
+import { InMemoryRoomStore } from './inMemoryRoomStore.js';
 import { bookingView } from './utils.js';
 
 /**
