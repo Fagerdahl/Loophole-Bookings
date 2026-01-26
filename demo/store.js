@@ -1,54 +1,37 @@
+import { InMemoryRoomStore } from './inMemoryRoomStore.js';
+import { Room } from '../src/domain/entities/Room.js';
+
 /**
- * Implementation of in-memory RoomStore
+ * DEMO STORE for demo purposes
+ * This file owns the demo lifecycle (seed + reset)
+ * Can be resettable between demo runs or requests (for UI server)
  *
- * Purpose:
- * - Used exclusively for demos and tests.
- * - Mimics a persistence layer without involving a database or API.
+ * Important:
+ * - The InMemoryRoomStore itself contains no demo logic.
+ * - Reset functionality is intentionally placed here to avoid polluting the infrastructure layer.
  *
  * Why this matters in the exam:
- * - Demonstrates that the application layer depends on abstractions,
- *   not concrete infrastructure.
- * - Makes the domain logic fully testable and demoable in isolation.
+ * - Demonstrates separation of concerns.
+ * - Shows how the same infrastructure can be reused
+ *   in tests, demos and other adapters.
  */
 
-export class InMemoryRoomStore {
-  #rooms;
+export function createDemoStore() {
+  const buildRoomStore = () =>
+    new InMemoryRoomStore([
+      // Bookings: [] is ALWAYS required to avoid undefined, This is correct initialization of aggregaete root
+      new Room({ id: 'room-1', capacity: 2, bookings: [] }),
+      new Room({ id: 'room-2', capacity: 4, bookings: [] }),
+    ]);
 
-  constructor(rooms = []) {
-    // Copy the array to avoid external mutation of internal state
-    this.#rooms = rooms;
-  }
+  let roomStore = buildRoomStore();
 
-  /**
-   * Returns all rooms in the store.
-   * Note:
-   * - Returns a shallow copy to protect internal state.
-   * - Rooms themselves are immutable aggregate roots.
-   */
-  listRooms() {
-    return [...this.#rooms];
-  }
-
-  /**
-   * Fetch a single room by id.
-   * Used in demos to verify state after a use case has run.
-   */
-  getRoomById(id) {
-    return this.#rooms.find((r) => r.id === id);
-  }
-
-  /**
-   * Persist an updated Room aggregate.
-   * In a real system this would be a database update.
-   * Here we simply replace the room in memory.
-   */
-  saveRoom(updatedRoom) {
-    const exists = this.#rooms.some((r) => r.id === updatedRoom.id);
-    if (!exists) {
-      throw new Error(`Room not found: ${updatedRoom.id}`);
-    }
-    this.#rooms = this.#rooms.map((r) =>
-      r.id === updatedRoom.id ? updatedRoom : r
-    );
-  }
+  return {
+    listRooms: () => roomStore.listRooms(),
+    getRoomById: (id) => roomStore.getRoomById(id),
+    saveRoom: (room) => roomStore.saveRoom(room),
+    reset: () => {
+      roomStore = buildRoomStore();
+    },
+  };
 }

@@ -17,6 +17,7 @@
     "demo:5.3": "node demo/denyUnauthorizedCancel.js",
     "demo:5.4": "node demo/noAvailableRoom.js",
     "demo": "npm run demo:5.1 && npm run demo:5.2 && npm run demo:5.3 && npm run demo:5.4",
+    "demo:ui": "node demo/ui-server.js",
     "prepare": "husky"
   },
   "repository": {
