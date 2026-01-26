@@ -1,0 +1,227 @@
+/* DEMO UI STYLING */
+
+/* Centralizing common colors and consistency */
+:root {
+  --border: #dedede;
+  --bg: #ffffff;
+  --bg-soft: #f7f7f7;
+  --text: #111;
+  --muted: #666;
+}
+
+/* Reset and normalize */
+* {
+  box-sizing: border-box;
+}
+
+/* Baseline typography and page background */
+body {
+  margin: 0; /* Remove default margin */
+  background: var(--bg);
+  color: var(--text);
+  font-family:
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    sans-serif;
+}
+
+/* Page container Content - readable and centered on large screens */
+.wrap {
+  max-width: 980px;
+  margin: 2rem auto;
+  padding: 0 1rem 3rem;
+}
+
+/* Light spacing separation under headers */
+.header {
+  margin-bottom: 1rem;
+}
+
+/* Secondary text used for explanations - makes the UI instructional */
+.subtle {
+  color: var(--muted);
+}
+
+/* A repeated visual "Card" component to group related controls and state */
+.panel {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+  background: var(--bg);
+  margin: 1rem 0;
+}
+
+/* Layout - Single column by default. Two columns on wider screens */
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+
+/* UC1 and UC2 side-by-side on larger screens for fast comparisons */
+@media (min-width: 860px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
+
+/* Grid-based spacing makes fields align without complex CSS */
+.form {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+/* Label as container: Keeps input and label text together */
+label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+/* Input baseline */
+input[type='text'],
+input[type='date'],
+input[type='number'] {
+  padding: 0.55rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+/* Row utility: Used for button groups. Wrap controls don´t overflow on small screens */
+.row {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* Button baseline: Neutral, emphasis on function, not decor */
+button {
+  padding: 0.55rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-soft);
+  cursor: pointer;
+}
+
+/* Hover effect for buttons */
+button:hover {
+  filter: brightness(0.98);
+}
+
+/* Inline label: Checkobox. Keeps box and labeltext on line and aligned */
+.inline {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/*
+Status message area
+Uses data-kind to reflect backend outcomes with colors
+    ok   - Successful operation
+    rule  - DomainError (business rule violation)
+    error - SystemError (unexpected failure)
+    info  - Informational message
+*/
+#message {
+  margin: 0.5rem 0 0;
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-soft);
+}
+
+#message[data-kind='ok'] {
+  border-color: #8bcf8b;
+  background: #f0fbf0;
+}
+
+#message[data-kind='rule'] {
+  border-color: #f3c07a;
+  background: #fff7ed;
+}
+
+#message[data-kind='error'] {
+  border-color: #f0a3a3;
+  background: #fff1f1;
+}
+
+#message[data-kind='info'] {
+  border-color: var(--border);
+  background: var(--bg-soft);
+}
+
+/* Rooms container- Grid makes multiple rooms align */
+.rooms {
+  display: grid;
+  gap: 1rem;
+}
+
+/* Room section separator - A top border gives a clear boundary between rooms */
+.room {
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+}
+
+/* Booking list: Reset list styling for a clean app-like demo */
+.bookings {
+  list-style: none;
+  padding-left: 0;
+  margin: 0.75rem 0 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+/* Each booking is a small “row card”: Mobile-first: stacked fields, then switch to columns on wider screens */
+.booking {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-soft);
+}
+
+/* On larger screens align booking details in one line */
+@media (min-width: 640px) {
+  .booking {
+    grid-template-columns: auto auto 1fr auto;
+    align-items: center;
+    gap: 0.75rem;
+  }
+}
+
+/* IDs and technical values: Monospace communicates “identifier / system value” to the user. */
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* Prevent IDs from breaking mid-string */
+.id {
+  white-space: nowrap;
+}
+
+/* Status pill:
+   - A compact indicator for booking state (Created/Cancelled).
+   - It supports quick visual confirmation of state transitions. */
+.pill {
+  display: inline-block;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: #fff;
+  font-size: 0.85rem;
+}
+
+/* Booking lifecycle colors: Minimal but distinct states for CREATED vs CANCELLED */
+.pill[data-status='CREATED'] {
+  border-color: #9ec5ff;
+  background: #eff6ff;
+}
+
+.pill[data-status='CANCELLED'] {
+  border-color: #c7c7c7;
+  background: #f3f4f6;
+}

@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bokningar Vörderåsgårdens pensionat – Demo UI</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+
+  <body>
+    <main class="wrap">
+      <header class="header">
+        <h1>Bokningar Vörderåsgårdens pensionat – Demo UI</h1>
+        <p class="subtle">
+          Frontend is intentionally minimal. It triggers existing use cases and
+          renders results from the demo API.
+        </p>
+      </header>
+
+      <section class="panel">
+        <h2>Status</h2>
+        <p id="message" data-kind="info">Initially Ready</p>
+        <div class="row">
+          <button id="refreshBtn" type="button">Refresh state</button>
+          <button id="resetBtn" type="button">Reset demo state</button>
+          <button id="seedNoAvailBtn" type="button">
+            Seed no-availability
+          </button>
+        </div>
+      </section>
+
+      <section class="grid">
+        <section class="panel">
+          <h2>UC1: Create booking</h2>
+
+          <form id="createForm" class="form">
+            <label>
+              From
+              <input id="from" type="date" value="2026-02-01" required />
+            </label>
+
+            <label>
+              To
+              <input id="to" type="date" value="2026-02-03" required />
+            </label>
+
+            <label>
+              Guests
+              <input id="guests" type="number" min="1" value="2" required />
+            </label>
+
+            <div class="row">
+              <button type="submit">Create</button>
+              <button id="overlapBtn" type="button">
+                Create overlapping (expect deny)
+              </button>
+            </div>
+          </form>
+
+          <p class="subtle">
+            Overlap button repeats the same request again to trigger the “no
+            availability” domain rule.
+          </p>
+
+          <p class="subtle">
+            Last created booking id:
+            <code id="lastId">—</code>
+          </p>
+        </section>
+
+        <section class="panel">
+          <h2>UC2: Cancel booking</h2>
+
+          <form id="cancelForm" class="form">
+            <label>
+              Booking ID
+              <input
+                id="bookingId"
+                type="text"
+                placeholder="Paste booking id here"
+                required
+              />
+            </label>
+
+            <label class="inline">
+              <input id="isAdmin" type="checkbox" />
+              Cancel as admin
+            </label>
+
+            <div class="row">
+              <button type="submit">Cancel</button>
+              <button id="denyBtn" type="button">
+                Attempt cancel as non-admin (expect deny)
+              </button>
+            </div>
+          </form>
+
+          <p class="subtle">
+            The deny button forces <code>isAdmin=false</code> to demonstrate the
+            authorization rule.
+          </p>
+        </section>
+      </section>
+
+      <section class="panel">
+        <h2>Rooms (read-only state)</h2>
+        <div id="rooms" class="rooms"></div>
+      </section>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
