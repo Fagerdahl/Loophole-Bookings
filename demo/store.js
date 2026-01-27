@@ -20,8 +20,8 @@ export function createDemoStore() {
   const buildRoomStore = () =>
     new InMemoryRoomStore([
       // Bookings: [] is ALWAYS required to avoid undefined, This is correct initialization of aggregaete root
-      new Room({ id: 'room-1', capacity: 2, bookings: [] }),
-      new Room({ id: 'room-2', capacity: 4, bookings: [] }),
+      new Room({ id: 'Vaktmestaren', capacity: 2, bookings: [] }),
+      new Room({ id: 'Suiten', capacity: 4, bookings: [] }),
     ]);
 
   let roomStore = buildRoomStore();

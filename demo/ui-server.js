@@ -81,6 +81,29 @@ app.post('/api/reset', (req, res) => {
   res.json({ ok: true });
 });
 
+/**
+ * Demo-only helper:
+ * Seeds the store so that NO room can accept a booking for the given dates.
+ * This makes the "no availability" scenario deterministic for the UI demo.
+ */
+app.post('/api/demo/seed-no-availability', (req, res) => {
+  console.log('SEED NO AVAILABILITY DEMO');
+  store.reset();
+
+  const from = '2026-02-01';
+  const to = '2026-02-03';
+
+  const rooms = store.listRooms();
+
+  for (const room of rooms) {
+    createBooking({ from, to, guests: room.capacity }, store, {
+      idGenerator: () => `seed-${room.id}`,
+    });
+  }
+
+  res.json({ ok: true, seededRooms: rooms.length });
+});
+
 const port = Number(process.env.PORT ?? 5050);
 app.listen(port, () => {
   console.log(`Demo UI running on http://localhost:${port}`);
